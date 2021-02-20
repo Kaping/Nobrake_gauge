@@ -24,6 +24,7 @@ LiquidCrystal_I2C lcd(0x27, 20, 4); //lcd 선언, 도트 수에 따라 수정하
 unsigned long TimeSet = 0; //아두이노의 절대시간
 unsigned long First_Check = 0;
 unsigned long Second_Check = 0;
+int Round_time = 0;
 boolean check_speed false;
 
 char Car_Speed = 0; //차의 속도
@@ -48,8 +49,9 @@ void loop() {
   {
     Second_Check = TimeSet;
     check_speed = false;
-
-    Car_Speed = (WHEEL_MM * 1000000) / ((Second_Check - first_Check)*3.6); // km/h단위
   }
+  Round_time = Second_Check - first_Check;  //한바퀴 도는데 걸린 시간의 microsecond단위 : 1000 = 1초
 
+  Car_Speed = (WHEEL_MM * 1000000) / (Round_time * 36000000); // km/h단위
+  RPM       = Round_time / 6000;
 }
